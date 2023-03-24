@@ -8,24 +8,22 @@ const dbName = 'myperiodbook';
 
 app.use(express.json());
 
-// Handle login requests
+// login route with express
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   console.log(req.body)
 
   try {
-    // Connect to MongoDB
+    // connecting to mongo
     const client = await MongoClient.connect(url);
     const db = client.db(dbName);
 
-    // Find user by email
+    // find and verify password
     const user = await db.collection('users').findOne({ email });
-
-    // Verify password
     if (password == user.password) {
       res.send('Login successful');
     } else {
-      res.status(401).send('Invalid credentials');
+      res.status(401).send('username or password incorrect');
     }
 
     client.close();
